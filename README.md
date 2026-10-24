@@ -1,16 +1,11 @@
-
-<div align="center">
-# 🐍 python_labs
- 
-**Лабораторные работы по программированию на Python**
+# **Лабораторные работы по программированию на Python**
  
 ![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)
 ![Labs](https://img.shields.io/badge/labs-5%20of%2010-blue)
 ![stdlib](https://img.shields.io/badge/stack-stdlib%20%2B%20openpyxl-success)
  
 </div>
----
- 
+
 ## Навигация
  
 | № | Тема | Что отработано | Код |
@@ -45,8 +40,6 @@ pip install -r requirements.txt
 > [!NOTE]
 > Все команды выполняются из корня репозитория. Файлы данных хранятся в UTF-8; при просмотре в PowerShell используйте `Get-Content файл -Encoding UTF8`.
  
----
- 
 ## ЛР1. Ввод/вывод и форматирование
  
 **Цель:** создать репозиторий с нужной структурой, познакомиться с Visual Studio Code и реализовать базовые программы.
@@ -55,11 +48,13 @@ pip install -r requirements.txt
  
 <details>
 <summary>Код src/lab01</summary>
+
 ```python
+
 name = input('Имя: ')
 age = int(input('Возраст: '))
 print(f'Привет, {name}! Через год тебе будет {age+1}.')
- 
+
 a = float(input('a: ').replace(',', '.'))
 b = float(input('b: ').replace(',', '.'))
 summ = a+b
@@ -124,7 +119,6 @@ print(f'out: {out}')
 ```
  
 </details>
----
  
 ## ЛР2. Коллекции и матрицы
  
@@ -138,6 +132,7 @@ print(f'out: {out}')
  
 <details>
 <summary>Код src/lab02/arrays.py</summary>
+
 ```python
 def min_max(user_list):
     """
@@ -204,8 +199,10 @@ for test in test_data_f:
 ```
  
 </details>
+
 <details>
 <summary>Код src/lab02/matrix.py</summary>
+
 ```python
 def transpose(matrix):
     """
@@ -283,8 +280,10 @@ for test in test_data_cs:
 ```
  
 </details>
+
 <details>
 <summary>Код src/lab02/tuples.py</summary>
+
 ```python
 def format_record(user_tuple):
     """
@@ -323,7 +322,6 @@ for test in data:
 ```
  
 </details>
----
  
 ## ЛР3. Тексты и частоты слов
  
@@ -342,6 +340,7 @@ for test in data:
  
 <details>
 <summary>Код src/lib/text.py</summary>
+
 ```python
 import re
  
@@ -394,8 +393,10 @@ def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
 ```
  
 </details>
+
 <details>
 <summary>Код src/lab03/text_stats.py</summary>
+
 ```python
 import sys
 sys.stdin.reconfigure(encoding='utf-8')
@@ -437,7 +438,6 @@ if excel:
 ```
  
 </details>
----
  
 ## ЛР4. Файлы: TXT/CSV и отчёты по текстовой статистике
  
@@ -449,6 +449,7 @@ if excel:
 - `text_report.py`: отчёт `word,count`, параметры `--in`, `--out`, `--encoding`;
 - ★ несколько файлов: отчёты `--per-file` и `--total`, таблица в консоли;
 - обработка ошибок: нет файла и неверная кодировка дают понятное сообщение и код выхода 1; пустой вход даёт CSV только с заголовком.
+
 ```powershell
 python src/lab04/text_report.py
 python src/lab04/text_report.py --in data/lab04/cp1251.txt --encoding cp1251
@@ -457,6 +458,7 @@ python src/lab04/text_report.py --in data/lab04/a.txt data/lab04/b.txt --per-fil
  
 <details>
 <summary>Код src/lab04/text_report.py</summary>
+
 ```python
 from __future__ import annotations
  
@@ -588,7 +590,6 @@ if __name__ == "__main__":
 ```
  
 </details>
----
  
 ## ЛР5. JSON и конвертации (JSON↔CSV, CSV→XLSX)
  
@@ -614,16 +615,9 @@ python -c "from src.lab05.csv_xlsx import csv_to_xlsx; csv_to_xlsx('data/samples
  
 Собственные примеры (тема ЦСКА): `cska_players.json` для JSON → CSV, `cska_players.csv` для CSV → JSON, `cska_matches.csv` для CSV → XLSX.
  
-**Результат:**
- 
-![ЛР5: JSON → CSV](images/lab05/img01.png)
- 
-![ЛР5: результат CSV → XLSX](images/lab05/img04.png)
- 
-Подробный отчёт со всеми сценариями, проверками ошибок и скриншотами: [`src/lab05/README.md`](src/lab05/README.md).
- 
 <details>
 <summary>Код src/lab05/json_csv.py</summary>
+
 ```python
 from __future__ import annotations
  
@@ -712,8 +706,10 @@ def csv_to_json(csv_path: str | Path, json_path: str | Path) -> None:
 ```
  
 </details>
+
 <details>
 <summary>Код src/lab05/csv_xlsx.py</summary>
+
 ```python
 from __future__ import annotations
  
@@ -768,7 +764,6 @@ def csv_to_xlsx(csv_path: str | Path, xlsx_path: str | Path) -> None:
 ```
  
 </details>
----
  
 <div align="center">
  
