@@ -1,74 +1,16 @@
-Claude
-
-
-
-
-
-
-
-
-
-
-
-
-Readme lab05 · MD
 # Лабораторная работа 5. JSON и конвертации (JSON↔CSV, CSV→XLSX)
- 
-![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)
-![openpyxl](https://img.shields.io/badge/dependency-openpyxl-success)
-![Lab](https://img.shields.io/badge/lab-05-blue)
- 
-**Студент:** Василевский В. В., группа БИВТ-26-6-1
- 
+
 ## Содержание
  
 1. [Цель работы](#цель-работы)
-2. [Структура проекта](#структура-проекта)
-3. [Подготовка и установка](#подготовка-и-установка)
-4. [Форматы данных](#форматы-данных)
-5. [Задание A. Модуль json_csv.py](#задание-a-модуль-json_csvpy)
-6. [Задание B. Модуль csv_xlsx.py](#задание-b-модуль-csv_xlsxpy)
-7. [Допущения и принятые решения](#допущения-и-принятые-решения)
-8. [Проверка и валидация](#проверка-и-валидация)
-9. [Сценарии демонстрации](#сценарии-демонстрации)
-10. [Файлы данных](#файлы-данных)
-11. [Выводы](#выводы)
+2. [Подготовка и установка](#подготовка-и-установка)
+3. [Задание A. Модуль json_csv.py](#задание-a-модуль-json_csvpy)
+4. [Задание B. Модуль csv_xlsx.py](#задание-b-модуль-csv_xlsxpy)
+5. [Допущения и принятые решения](#допущения-и-принятые-решения)
+6. [Демонстрация работы](#сценарии-демонстрации)
 ## Цель работы
  
 Разобраться с форматом JSON, сериализацией и десериализацией, а также с табличными конвертациями: JSON → CSV, CSV → JSON и CSV → XLSX. Работа продолжает ЛР4 (работа с файлами) и готовит базу для ЛР6 (CLI-конвертеры) и ЛР7 (тестирование). Кроме `openpyxl` (только для XLSX) используется стандартная библиотека: `json`, `csv`, `pathlib`.
- 
-## Структура проекта
- 
-```text
-python_labs/
-├─ README.md
-├─ requirements.txt             # openpyxl
-├─ src/
-│  ├─ lib/                      # переиспользуемые модули (ЛР3)
-│  ├─ lab04/
-│  └─ lab05/
-│     ├─ __init__.py
-│     ├─ json_csv.py            # JSON↔CSV
-│     └─ csv_xlsx.py            # CSV→XLSX
-├─ data/
-│  ├─ samples/                  # входные примеры
-│  │  ├─ people.json
-│  │  ├─ people.csv
-│  │  ├─ cities.csv
-│  │  ├─ cska_players.json      # собственный пример для JSON→CSV
-│  │  ├─ cska_players.csv       # собственный пример для CSV→JSON
-│  │  └─ cska_matches.csv       # собственный пример для CSV→XLSX
-│  └─ out/                      # результаты конвертаций
-│     ├─ people_from_json.csv
-│     ├─ people_from_csv.json
-│     ├─ people.xlsx
-│     ├─ cities.xlsx
-│     ├─ cska_players_from_json.csv
-│     ├─ cska_players_from_csv.json
-│     └─ cska_matches.xlsx
-└─ images/
-   └─ lab05/                    # скриншоты
-```
  
 ## Подготовка и установка
  
@@ -78,32 +20,11 @@ python_labs/
 pip install -r requirements.txt
 ```
  
-Содержимое `requirements.txt` (единственная внешняя зависимость):
+Содержимое `requirements.txt`:
  
 ```text
 openpyxl>=3.1
 ```
- 
-## Форматы данных
- 
-**JSON** (JavaScript Object Notation) это текстовый формат обмена структурированными данными: объекты (словари) и списки. В работе используется JSON в виде списка словарей одинаковой или близкой формы:
- 
-```json
-[
-  {"name": "Alice", "age": 22},
-  {"name": "Bob", "age": 25}
-]
-```
- 
-**CSV** (Comma-Separated Values) это табличный текстовый формат: строка файла равна строке таблицы, значения разделены запятыми, первая строка заголовок:
- 
-```csv
-name,age,city
-Alice,22,SPB
-Bob,25,Moscow
-```
- 
-**XLSX** это формат Excel (архив с XML внутри). Создаётся библиотекой `openpyxl`.
  
 Используемые инструменты:
  
@@ -124,23 +45,10 @@ Bob,25,Moscow
 | `csv_to_json(csv_path, json_path)` | читает CSV с заголовком и записывает JSON (список словарей) |
 | `check_suffix(path, suffix)` | проверяет расширение файла, иначе `ValueError` |
 | `is_list_of_dicts(data)` | проверяет, что данные это список словарей, среди которых есть непустой |
- 
-### Как работает json_to_csv
- 
-1. Проверяются расширения: вход `.json`, выход `.csv` (иначе `ValueError`).
-2. Файл читается как UTF-8 (если файла нет, `FileNotFoundError`).
-3. Текст разбирается через `json.loads`. Пустой файл или испорченный синтаксис приводят к `JSONDecodeError`, которая перехватывается и превращается в `ValueError`.
-4. Структура проверяется функцией `is_list_of_dicts`: нужен список словарей, не пустой (иначе `ValueError`).
-5. Список колонок собирается из ключей всех объектов: `list(dict.fromkeys(key for item in data for key in item))`. Это даёт уникальные ключи в порядке первого появления.
-6. Запись через `csv.DictWriter(f, fieldnames=..., restval="")`: отсутствующие поля заполняются пустыми строками.
-### Как работает csv_to_json
- 
-1. Проверяются расширения: вход `.csv`, выход `.json`.
-2. Файл читается через `csv.DictReader`: первая строка становится ключами словарей, все значения остаются строками.
-3. Если нет заголовка (пустой файл) или нет ни одной строки данных, поднимается `ValueError`.
-4. Результат записывается через `json.dump(rows, f, ensure_ascii=False, indent=2)`: кириллица сохраняется как есть, структура читаема.
+
 <details>
 <summary>Код src/lab05/json_csv.py</summary>
+
 ```python
 from __future__ import annotations
  
@@ -229,18 +137,12 @@ def csv_to_json(csv_path: str | Path, json_path: str | Path) -> None:
 ```
  
 </details>
+
 ## Задание B. Модуль csv_xlsx.py
- 
-Функция `csv_to_xlsx(csv_path, xlsx_path)` конвертирует CSV в XLSX через `openpyxl`:
- 
-1. Проверяются расширения: вход `.csv`, выход `.xlsx` (иначе `ValueError`).
-2. CSV читается через `csv.reader` в кодировке UTF-8, пустые строки пропускаются. Если данных нет, `ValueError`.
-3. Создаётся книга `Workbook()`, лист называется `Sheet1`.
-4. Строки CSV добавляются на лист методом `ws.append` (первая строка это заголовок).
-5. Ширина каждой колонки равна длине самого длинного значения в ней, но не меньше 8 символов.
-6. Недостающие папки создаются, книга сохраняется (`wb.save`).
+
 <details>
 <summary>Код src/lab05/csv_xlsx.py</summary>
+
 ```python
 from __future__ import annotations
  
@@ -295,6 +197,7 @@ def csv_to_xlsx(csv_path: str | Path, xlsx_path: str | Path) -> None:
 ```
  
 </details>
+
 ## Допущения и принятые решения
  
 | Вопрос | Решение |
@@ -311,25 +214,9 @@ def csv_to_xlsx(csv_path: str | Path, xlsx_path: str | Path) -> None:
 | Лист XLSX | называется `Sheet1` |
 | Ширина колонок XLSX | по самому длинному значению в колонке, но не меньше 8 символов |
 | Вывод в консоль из модулей | отсутствует: функции только работают с файлами и поднимают исключения |
-| Внешние пакеты | только `openpyxl` (по условию), остальное стандартная библиотека |
+| Внешние пакеты | только `openpyxl` (по условию), остальное стандартная библиотека | 
  
-## Проверка и валидация
- 
-| Ситуация | Функция | Исключение |
-|---|---|---|
-| Пустой JSON-файл | `json_to_csv` | `ValueError("Пустой JSON или неподдерживаемая структура")` |
-| Испорченный синтаксис JSON | `json_to_csv` | `ValueError` с тем же сообщением |
-| JSON не список, пустой список или список пустых словарей | `json_to_csv` | `ValueError` с тем же сообщением |
-| Список с не-словарями (`[1, 2, 3]`) | `json_to_csv` | `ValueError` с тем же сообщением |
-| Неверное расширение входного или выходного файла | все три функции | `ValueError` |
-| Пустой CSV или CSV без заголовка | `csv_to_json` | `ValueError("CSV без заголовка или пустой")` |
-| CSV только с заголовком | `csv_to_json` | `ValueError("В CSV нет строк данных")` |
-| Пустой CSV | `csv_to_xlsx` | `ValueError("CSV пустой")` |
-| Входной файл не существует | все три функции | `FileNotFoundError` |
- 
-Дополнительная проверка: количество записей до и после конвертации совпадает (см. раздел «Сценарии демонстрации»).
- 
-## Сценарии демонстрации
+## Демонстрация работы
  
 Все команды выполняются из корня репозитория. Просмотр CSV и JSON в PowerShell делается с параметром `-Encoding UTF8`, иначе русские буквы отображаются неправильно (файлы при этом записаны верно).
  
@@ -521,24 +408,3 @@ python -c "from src.lab05.csv_xlsx import csv_to_xlsx; csv_to_xlsx('data/out/emp
 ```powershell
 Remove-Item data\out\empty.json, data\out\empty.csv, data\out\bad_items.json
 ```
- 
-## Файлы данных
- 
-| Файл | Назначение |
-|---|---|
-| `data/samples/people.json` | список из 4 объектов одинаковой формы (вход для JSON → CSV) |
-| `data/samples/people.csv` | те же данные в CSV (вход для CSV → JSON и CSV → XLSX, проверка обратимости) |
-| `data/samples/cities.csv` | таблица из 3 колонок для демонстрации CSV → XLSX |
-| `data/samples/cska_players.json` | собственный пример JSON → CSV (с пропущенными полями) |
-| `data/samples/cska_players.csv` | собственный пример CSV → JSON |
-| `data/samples/cska_matches.csv` | собственный пример CSV → XLSX (длинный текст для автоширины, условные данные) |
-| `data/out/people_from_json.csv` | результат JSON → CSV |
-| `data/out/people_from_csv.json` | результат CSV → JSON |
-| `data/out/people.xlsx`, `cities.xlsx`, `cska_matches.xlsx` | результаты CSV → XLSX |
-| `data/out/cska_players_from_json.csv`, `cska_players_from_csv.json` | результаты конвертации собственных примеров |
- 
-## Выводы
- 
-В работе реализованы три конвертации: JSON → CSV, CSV → JSON и CSV → XLSX. Освоены модуль `json` (`loads`, `dump`, параметры `ensure_ascii` и `indent`), классы `csv.DictReader` и `csv.DictWriter`, а также создание Excel-файлов через `openpyxl` с автоподбором ширины колонок. Реализована валидация: проверка расширений, пустых данных и структуры, понятные исключения `ValueError` и `FileNotFoundError`. Количество записей при конвертации сохраняется, кодировка везде UTF-8, а модули не выводят ничего в консоль и пригодны для повторного использования в ЛР6 (CLI-конвертеры) и ЛР7 (тестирование).
- 
-Claude finished the response
