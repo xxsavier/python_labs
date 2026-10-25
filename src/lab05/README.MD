@@ -238,9 +238,9 @@ Bob,25,Moscow
 ```
  
 **Скриншот 1.** Вывод команд выше: запуск и содержимое `people_from_json.csv`.
- 
-![Скриншот 1: JSON → CSV, содержимое people_from_json.csv](images/lab05/img01.png)
- 
+
+![Скриншот 1: JSON → CSV, содержимое people_from_json.csv](../../images/lab05/image01.png)
+
 ### Сценарий 2. CSV → JSON
  
 ```powershell
@@ -251,9 +251,9 @@ Get-Content data\out\people_from_csv.json -Encoding UTF8
 Ожидаемый результат: список из четырёх объектов с теми же ключами `name`, `age`, `city`; значения строки.
  
 **Скриншот 2.** Содержимое `people_from_csv.json`.
- 
-![Скриншот 2: CSV → JSON, содержимое people_from_csv.json](images/lab05/img02.png)
- 
+
+![Скриншот 2: CSV → JSON, содержимое people_from_csv.json](../../images/lab05/image02.png)
+
 ### Проверка количества записей
  
 ```powershell
@@ -264,9 +264,9 @@ python -c "import json; print(len(json.load(open('data/out/people_from_csv.json'
 Первая команда выводит 5 (заголовок и 4 записи), вторая выводит 4. В исходных `people.json` и `people.csv` тоже по 4 записи, значит, при конвертации записи не теряются и не добавляются.
  
 **Скриншот 3.** Вывод обеих команд.
- 
-![Скриншот 3: проверка количества записей](images/lab05/img03.png)
- 
+
+![Скриншот 3: проверка количества записей](../../images/lab05/image03.png)
+
 ### Сценарий 3. CSV → XLSX
  
 ```powershell
@@ -276,12 +276,12 @@ python -c "from src.lab05.csv_xlsx import csv_to_xlsx; csv_to_xlsx('data/samples
 Проверка вручную: открыть файлы в Excel или LibreOffice, убедиться, что лист называется `Sheet1`, первая строка заголовок, текст в колонках не обрезан, а ширина каждой колонки не меньше 8 символов.
  
 **Скриншот 4.** `people.xlsx` в Excel или LibreOffice (видно название листа и колонки).
- 
-![Скриншот 4: people.xlsx](images/lab05/img04.png)
+
+![Скриншот 4: people.xlsx](../../images/lab05/image05.png)
  
 **Скриншот 5.** `cities.xlsx` в Excel или LibreOffice.
- 
-![Скриншот 5: cities.xlsx](images/lab05/img05.png)
+
+![Скриншот 5: cities.xlsx](../../images/lab05/image04.png)
  
 ### Собственные примеры (тема ЦСКА)
  
@@ -307,8 +307,8 @@ name,position,birth_year,country
 ```
  
 **Скриншот 6.** Запуск и содержимое `cska_players_from_json.csv` (видны пустые клетки).
- 
-![Скриншот 6: cska_players_from_json.csv](images/lab05/img06.png)
+
+![Скриншот 6: cska_players_from_json.csv](../../images/lab05/image06.png)
  
 **CSV → JSON на примере `cska_players.csv`.**
  
@@ -318,8 +318,8 @@ Get-Content data\out\cska_players_from_csv.json -Encoding UTF8
 ```
  
 **Скриншот 7.** Содержимое `cska_players_from_csv.json` (5 объектов, `birth_year` в виде строки).
- 
-![Скриншот 7: cska_players_from_csv.json](images/lab05/img07.png)
+
+![Скриншот 7: cska_players_from_csv.json](../../images/lab05/image07.png)
  
 **CSV → XLSX на примере `cska_matches.csv`.** В колонке `comment` длинный текст, поэтому ширина колонки заметно больше остальных (автоширина). Данные в этом файле условные, они нужны только для демонстрации.
  
@@ -330,8 +330,8 @@ python -c "from src.lab05.csv_xlsx import csv_to_xlsx; csv_to_xlsx('data/samples
 Ожидаемые ширины колонок: A = 10, B = 9, C = 8, D = 8, E = 51.
  
 **Скриншот 8.** `cska_matches.xlsx` в Excel или LibreOffice.
- 
-![Скриншот 8: cska_matches.xlsx](images/lab05/img08.png)
+
+![Скриншот 8: cska_matches.xlsx](../../images/lab05/image08.png)
  
 ### Сценарий 4. Проверка ошибок
  
@@ -350,8 +350,8 @@ python -c "from src.lab05.json_csv import json_to_csv; json_to_csv('data/out/emp
 ```
  
 Результат: `ValueError: Пустой JSON или неподдерживаемая структура`.
- 
-![Скриншот 9: пустой JSON](images/lab05/img09.png)
+
+![Скриншот 9: пустой JSON](../../images/lab05/image09.png)
  
 **Список не из словарей.**
  
@@ -360,8 +360,8 @@ python -c "from src.lab05.json_csv import json_to_csv; json_to_csv('data/out/bad
 ```
  
 Результат: `ValueError: Пустой JSON или неподдерживаемая структура`.
- 
-![Скриншот 10: список не из словарей](images/lab05/img10.png)
+
+![Скриншот 10: список не из словарей](../../images/lab05/image10.png)
  
 **Пустой CSV.**
  
@@ -370,8 +370,8 @@ python -c "from src.lab05.json_csv import csv_to_json; csv_to_json('data/out/emp
 ```
  
 Результат: `ValueError: CSV без заголовка или пустой`.
- 
-![Скриншот 11: пустой CSV](images/lab05/img11.png)
+
+![Скриншот 11: пустой CSV](../../images/lab05/image11.png)
  
 **Отсутствующий файл.**
  
@@ -381,7 +381,7 @@ python -c "from src.lab05.json_csv import json_to_csv; json_to_csv('data/samples
  
 Результат: `FileNotFoundError: [Errno 2] No such file or directory: 'data\\samples\\net.json'`.
  
-![Скриншот 12: отсутствующий файл](images/lab05/img12.png)
+![Скриншот 12: отсутствующий файл](../../images/lab05/image12.png)
  
 **Неверный тип файла.**
  
@@ -390,8 +390,8 @@ python -c "from src.lab05.json_csv import json_to_csv; json_to_csv('data/samples
 ```
  
 Результат: `ValueError: Неверный тип файла: ожидается .json, получен .csv`.
- 
-![Скриншот 13: неверный тип файла](images/lab05/img13.png)
+
+![Скриншот 13: неверный тип файла](../../images/lab05/image13.png)
  
 **Пустой CSV при конвертации в XLSX.**
  
@@ -401,7 +401,7 @@ python -c "from src.lab05.csv_xlsx import csv_to_xlsx; csv_to_xlsx('data/out/emp
  
 Результат: `ValueError: CSV пустой`.
  
-![Скриншот 14: пустой CSV при конвертации в XLSX](images/lab05/img14.png)
+![Скриншот 14: пустой CSV при конвертации в XLSX](../../images/lab05/image14.png)
  
 После проверки временные файлы удаляются:
  
