@@ -6,8 +6,9 @@ from src.lib.text import normalize, tokenize, count_freq, top_n
 
 
 def main():
-    """1. Анализирует частоты слов в тексте, выводит ТОП-n слов (используются функции из lab03).
-       2. Выводит содержимое файла построчно (с нумерацией при -n).
+    """
+    1. Анализирует частоты слов в тексте, выводит ТОП-n слов (используются функции из lab03).
+    2. Выводит содержимое файла построчно (с нумерацией при -n).
     
     Подкоманды:
         stats --input ПУТЬ [--top N]
@@ -28,7 +29,7 @@ def main():
 
     """
     parser = argparse.ArgumentParser(description="CLI-утилиты лабораторной №6")
-    subparsers = parser.add_subparsers(dest="command")
+    subparsers = parser.add_subparsers(dest="command", required=True)
 
     cat_parser = subparsers.add_parser("cat", help="Вывод содержимого файла построчно")
     cat_parser.add_argument("--input", required=True, help="Путь к файлу")
@@ -39,9 +40,6 @@ def main():
     stats_parser.add_argument("--top", type=int, default=5, help="Количество ТОП-элементов")
 
     args = parser.parse_args()
-
-    if args.command not in ("cat", "stats"):
-        parser.error('Подкоманда не указана. Возможные подкоманды: stats, cat')
 
     try:
         if args.command == "stats":
