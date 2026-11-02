@@ -1,9 +1,5 @@
 # **Лабораторные работы по программированию на Python**
  
-![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)
-![Labs](https://img.shields.io/badge/labs-5%20of%2010-blue)
-![stdlib](https://img.shields.io/badge/stack-stdlib%20%2B%20openpyxl-success)
- 
 </div>
 
 ## Навигация
@@ -15,6 +11,7 @@
 | **ЛР3** | Тексты и частоты слов | нормализация, регулярные выражения, словари | [`src/lab03`](src/lab03), [`src/lib/text.py`](src/lib/text.py) |
 | **ЛР4** | Файлы TXT/CSV | `pathlib`, кодировки, `csv`, `argparse` | [`src/lab04`](src/lab04) |
 | **ЛР5** | JSON и конвертации | `json`, `DictReader`/`DictWriter`, `openpyxl` | [`src/lab05`](src/lab05) |
+| **ЛР6** | CLI‑утилиты с argparse | `argparse`, `pathlib`, `sys` | [`src/lab06`](src/lab06) |
  
 ## Структура репозитория
  
