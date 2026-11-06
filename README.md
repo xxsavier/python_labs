@@ -12,6 +12,7 @@
 | **ЛР4** | Файлы TXT/CSV | `pathlib`, кодировки, `csv`, `argparse` | [`src/lab04`](src/lab04) |
 | **ЛР5** | JSON и конвертации | `json`, `DictReader`/`DictWriter`, `openpyxl` | [`src/lab05`](src/lab05) |
 | **ЛР6** | CLI‑утилиты с argparse | `argparse`, `pathlib`, `sys` | [`src/lab06`](src/lab06) |
+| **ЛР7** | Поиск, сортировка и измерение времени | `random`, `timeit`, `pandas`, `matplotlib.pyplot` | [`src/lab07`](src/lab07) |
  
 ## Структура репозитория
  
