@@ -65,13 +65,13 @@ def check_two_sum(trials=100) -> int:
         brute_result = two_sum_brute(nums, target)
         fast_result = two_sum_fast(nums, target)
         if brute_result is None:
-            assert fast_result is None, f"Результат two_sum_fast и two_sum_brute не совпадают. two_sum_fast нашел пару, two_sum_brute - нет"
+            assert fast_result is None, f"Результат two_sum_fast и two_sum_brute не совпадают на {nums}, при требуемом {target}. two_sum_fast нашел пару, two_sum_brute - нет"
         else:
             bi, bj = brute_result
-            assert nums[bi] + nums[bj] == target, f"two_sum_brute нашел неверную пару"
-            assert fast_result is not None, f"Результат two_sum_fast и two_sum_brute не совпадают. two_sum_brute нашел пару, two_sum_fast - нет"
+            assert nums[bi] + nums[bj] == target, f"two_sum_brute нашел неверную пару {brute_result} в {nums}, при требуемой сумме {target}"
+            assert fast_result is not None, f"Результат two_sum_fast и two_sum_brute не совпадают на {nums}, при требуемом {target}. two_sum_brute нашел пару, two_sum_fast - нет"
             fi, fj = fast_result
-            assert nums[fi] + nums[fj] == target, f"two_sum_brute верно нашел пару, two_sum_fast - нет"
+            assert nums[fi] + nums[fj] == target, f"two_sum_brute верно нашел пару, two_sum_fast - нет: {fast_result} в {nums}, при требуемой сумме {target}"
     return trials
         
 if __name__ == "__main__":
