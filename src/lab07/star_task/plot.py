@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("data/lab07/bench_for_plot.csv")
+df = pd.read_csv("data/lab07/star_task/bench_for_plot.csv")
 df = df[df["Task"] == "sort"]
 
 for method in df["Method"].unique():
