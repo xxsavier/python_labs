@@ -352,6 +352,14 @@ from src.lab07.search import linear_search, binary_search, two_sum_brute, two_su
 random.seed(42)
 
 def bench_sorts(n):
+    """Бенчмарк сортировок
+
+    Args:
+        n(int): количество элементов в списке
+
+    Returns:
+        list: список с результатами
+    """    
     data = [random.randint(-1_000_000, 1_000_000) for _ in range(n)]
     rows = []
     x = timeit.timeit(lambda:sorted(data), number=1)
@@ -370,6 +378,11 @@ def bench_sorts(n):
     return rows
 
 def bench_search():
+    """Бенчмарк алгоритмов поиска
+
+    Returns:
+        list: список с результатами
+    """    
     data_size = 100_000
     targets_quantity = 10_000
     data = [random.randint(-1_000_000, 1_000_000) for _ in range(data_size)]
@@ -392,6 +405,14 @@ def bench_search():
     return rows
 
 def bench_two_sum(n):
+    """Бенчмарк алгоритмов решения two_sum 
+
+    Args:
+        n(int): количество элементов в списке
+
+    Returns:
+        list: список с результатами
+    """    
     data = [random.randint(-1_000_000, 1_000_000) for _ in range(n)]
     target = data[1] + data[42]
     rows = []
@@ -402,6 +423,11 @@ def bench_two_sum(n):
     return rows
 
 def get_rows():
+    """Функция собирает все результаты в один список
+
+    Returns:
+        list: список со всеми результатами всех бенчмарков
+    """    
     all_rows = []
     all_rows.extend(bench_sorts(1_000))
     all_rows.extend(bench_sorts(10_000))

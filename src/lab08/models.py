@@ -2,7 +2,13 @@ from datetime import date
 
 STUDENT_FIELDS = ("fio", "birthdate", "group", "gpa")
 
-def make_student(fio, birthdate, group, gpa):
+def make_student(fio, birthdate, group, gpa) -> dict:
+    """Функция собирает запись о студенте, проверяя каждое поле.
+    
+    Принимает 4 блока данных о студенте: ФИО, дата рождения, группа, GPA.
+    Проверяет введенные данные согласно условию, при ошибках возвращает ValueError с понятным сообщением.
+    Возвращает готовую запись в виде словаря(dict)
+    """
     # Валидация GPA
     if isinstance(gpa, (int, float)) and not isinstance(gpa, bool):
         gpa = float(gpa)
@@ -42,6 +48,13 @@ def make_student(fio, birthdate, group, gpa):
     return {"fio": fio, "birthdate": birthdate, "group": group, "gpa": round(gpa, 2)}
 
 def validate_student(rec):
+    """Общая валидация готового словаря: проверка данных, проверка соответствия ключей(полей).
+    
+    Принимает готовую запись(словарь).
+    Проверяет данные через make_student, проверяет соответсие ключей и полей, ValueError при ошибках.
+    Функция ничего не возвращает.
+    
+    """
     #Проверка набора ключей
     if not isinstance(rec, dict):
         raise ValueError(f"Запись должна быть словарем, получено - {type(rec)}")
@@ -55,6 +68,12 @@ def validate_student(rec):
     make_student(rec["fio"], rec["birthdate"], rec["group"], rec["gpa"])
     
 def student_age(rec, today=None):
+    """Функция подсчета возраста студента.
+    
+    Принимает запись о студенте, сегодняшнюю дату(не обязательный параметр).
+    Возвращает полный возраст студента, при ошибках - ValueError. 
+    
+    """
     today = today or date.today()
     birthday = date.fromisoformat(rec["birthdate"])
     if birthday > today:
