@@ -62,21 +62,14 @@ STUDENT_FIELDS = ("fio", "birthdate", "group", "gpa")
 
 При проверке GPA допускаются целые и вещественные числа в диапазоне от 0
 до 5. Булевы значения не принимаются. Дата рождения должна быть
-корректной датой в формате ISO и не должна находиться в будущем. ФИО и
+корректной датой и не должна находиться в будущем. ФИО и
 название группы должны быть непустыми строками.
 
 ### Исходный код `models.py`
 
-```{=html}
 <details>
-```
-```{=html}
-<summary>
-```
-Показать полный исходный код
-```{=html}
-</summary>
-```
+<summary>Код src/lab08/models.py</summary>
+
 ``` python
 from datetime import date
 
@@ -131,7 +124,7 @@ def validate_student(rec):
     """Общая валидация готового словаря: проверка данных, проверка соответствия ключей(полей).
 
     Принимает готовую запись(словарь).
-    Проверяет данные через make_student, проверяет соответсвие ключей и полей, ValueError при ошибках.
+    Проверяет данные через make_student, проверяет соответсие ключей и полей, ValueError при ошибках.
     Функция ничего не возвращает.
 
     """
@@ -164,11 +157,24 @@ def student_age(rec, today=None):
     return today.year - birthday.year - minus_year
 
 def student_to_dict(rec):
+    """Проверяет запись о студенте и возвращает её копию в виде словаря.
+
+    Принимает готовую запись о студенте.
+    Проверяет корректность записи с помощью validate_student.
+    Возвращает новый словарь с данными студента.
+    """
     validate_student(rec)
     rec_copy = rec.copy()
     return rec_copy
 
 def student_from_dict(d):
+    """Создаёт и проверяет запись о студенте на основе переданного словаря.
+
+    Принимает словарь с данными студента.
+    Получает значения полей ФИО, даты рождения, группы и GPA.
+    Преобразует GPA в тип float, если значение является числом.
+    Проверяет полученную запись и возвращает её в виде нового словаря.
+    """
     if not isinstance(d, dict):
         raise ValueError(f"Ожидался словарь, получено - {type(d)}")
 
@@ -191,6 +197,12 @@ def student_from_dict(d):
     return des_from_d
 
 def format_student(rec):
+    """Формирует удобную для чтения строку с информацией о студенте.
+
+    Принимает запись о студенте в виде словаря.
+    Формирует сокращённое представление ФИО, добавляет группу, возраст и GPA.
+    Возвращает готовую строку с информацией о студенте.
+    """
     #Обработка ФИО
     fio = rec["fio"]
     fio_split = fio.split()
@@ -217,9 +229,12 @@ if __name__ == "__main__":
         print(f"Перехвачена ожидаемая ошибка: {e}")
 ```
 
-```{=html}
 </details>
-```
+
+**Скриншот 1.** Работа models.py
+
+![screen 1](../../images/lab08/image01.png)
+
 ## Задание 2. Сериализация и десериализация JSON
 
 В файле `src/lab08/serialize.py` реализованы две основные функции:
@@ -245,16 +260,9 @@ if __name__ == "__main__":
 
 ### Исходный код `serialize.py`
 
-```{=html}
 <details>
-```
-```{=html}
-<summary>
-```
-Показать полный исходный код
-```{=html}
-</summary>
-```
+<summary>Код src/lab08/serialize.py</summary>
+
 ``` python
 import json
 from pathlib import Path
@@ -265,6 +273,13 @@ from src.lab04.io_txt_csv import read_text
 
 
 def students_to_json(students, path):
+    """Сериализует список студентов и сохраняет его в JSON-файл.
+
+    Принимает список записей о студентах и путь к файлу.
+    Проверяет расширение файла, при необходимости создаёт родительские директории.
+    Преобразует записи студентов в словари и записывает их в JSON.
+    Использует UTF-8, сохраняет кириллицу и форматирует JSON с отступами.
+    """
     check_suffix(path, ".json")
 
     file = Path(path)
@@ -277,6 +292,15 @@ def students_to_json(students, path):
 
 
 def students_from_json(path) -> list[dict]:
+    """Десериализует JSON-файл и возвращает список записей о студентах.
+
+    Принимает путь к JSON-файлу.
+    Проверяет расширение и наличие содержимого в файле.
+    Преобразует JSON в Python-объекты, проверяет структуру списка
+    и валидирует каждую запись с помощью student_from_dict.
+    При ошибках десериализации или некорректной записи вызывает ValueError.
+    Возвращает список проверенных словарей с данными студентов.
+    """
     check_suffix(path, ".json")
 
     students = read_text(path).strip()
@@ -304,28 +328,27 @@ def students_from_json(path) -> list[dict]:
 
 
 if __name__ == "__main__":    
-    input_file = "data/lab08/students_input.json"
-    output_file = "data/lab08/students_output.json"
-    bad_file = "data/lab08/students_bad.json"
+    input_json = "data/lab08/students_input.json"
+    output_json = "data/lab08/students_output.json"
+    bad_json = "data/lab08/students_bad.json"
 
-    print(f"1. Чтение из {input_file} и сохранение в {output_file}:")
+    print(f"Чтение из {input_json} и сохранение в {output_json}:")
     try:
-        students_list = students_from_json(input_file)
+        students_list = students_from_json(input_json)
         print(f"Успешно загружено записей: {len(students_list)}") 
-        students_to_json(students_list, output_file)
+        students_to_json(students_list, output_json)
     except Exception as e:
         print(f"Ошибка: {e}")
 
-    print(f"2. Попытка загрузить файл с ошибками ({bad_file}):")
+    print(f"Попытка загрузить файл с ошибками ({bad_json}):")
     try:
-        students_from_json(bad_file)
+        students_from_json(bad_json)
     except ValueError as e:
         print(f"Ошибка: {e}")
 ```
 
-```{=html}
 </details>
-```
+
 ## Проверка работы программы
 
 Для проверки используются три файла:
@@ -370,9 +393,24 @@ if __name__ == "__main__":
 При загрузке этого файла программа прекращает обработку на первой
 некорректной записи и сообщает её номер.
 
-**Примечание:** в текущем коде проверка GPA выполняется раньше проверки
-даты. Поэтому для представленного файла первой обнаруживается ошибка
-строкового значения GPA, а не ошибка даты.
+Содержимое `students_bad.json`:
+
+``` json
+[
+    {
+        "fio": "Степанова Степанида Степановна",
+        "birthdate": "2008-02-30",
+        "group": "БИВТ-26-6-2",
+        "gpa": "3.9"
+    },
+    {
+        "fio": "Юрьев Юрий Юрьевич",
+        "birthdate": "2008-11-01",
+        "group": "БИВТ-26-6-10",
+        "gpa": 44.8
+    }
+]
+```
 
 ### Запуск
 
@@ -390,19 +428,14 @@ py -m src.lab08.serialize
 
 ## Скриншоты работы программы
 
-**Скриншот 1.** Успешная загрузка студентов из `students_input.json` и
-сохранение в `students_output.json`.
+**Скриншот 2.** Успешная загрузка студентов из `students_input.json` и
+сохранение в `students_output.json`; Проверка обработки некорректной даты рождения.
 
-![Скриншот 1. Успешная сериализация и
-десериализация](../../images/lab08/image01.png)
+![Скриншот 1. Успешная загрузка; Ошибка некорректной даты](../../images/lab08/image02.png)
 
-**Скриншот 2.** Проверка обработки некорректной даты рождения.
+**Скриншот 3.** Файл `students_output.json`.
 
-![Скриншот 2. Ошибка некорректной даты](../../images/lab08/image02.png)
-
-**Скриншот 3.** Проверка обработки недопустимого значения GPA.
-
-![Скриншот 3. Ошибка GPA](../../images/lab08/image03.png)
+![Скриншот 2. Выходной файл](../../images/lab08/image03.png)
 
 ## Итоги работы
 
