@@ -53,5 +53,25 @@ def load_students(path) -> list[dict]:
             
     return students
     
+def add_student(path, student):
+    pass
+    
+    
+def list_students(path, sort_by=None):
+    pass
+    
+    
+    
+def find_students(path, substr):
+    pass
+    
+    
+def remove_students(path, fio):
+    pass
+    
+    
+def update_students(path, fio, **fields):
+    pass
+    
     
     
