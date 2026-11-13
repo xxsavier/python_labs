@@ -14,7 +14,7 @@
 | **ЛР6** | CLI-утилиты с argparse | `argparse`, `pathlib`, `sys` | [`src/lab06`](src/lab06) | 🟩 |
 | **ЛР7** | Поиск, сортировка и измерение времени | `random`, `timeit`, `pandas`, `matplotlib.pyplot` | [`src/lab07`](src/lab07) | 🟩 |
 | **ЛР8** | Модель данных без классов: запись Student как словарь, валидация и сериализация | (де)сериализация, `datetime`, валидация, `record` | [`src/lab08`](src/lab08) | 🟩 |
-| **ЛР9** | «База данных» на CSV: CRUD-функции над students.csv и CLI | Будет заполнено | [`src/lab09`](src/lab09) | 🟨 |
+| **ЛР9** | «База данных» на CSV: CRUD-функции над students.csv и CLI | `argparse`, `pathlib`, `csv` | [`src/lab09`](src/lab09) | 🟨 |
 | **ЛР10** | Структуры данных: Stack, Queue, Linked List и бенчмарки | Будет заполнено | [`src/lab10`](src/lab10) | 🟥 |
 
 **## Обозначения статусов**
