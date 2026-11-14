@@ -47,31 +47,71 @@ def load_students(path) -> list[dict]:
         for num, student in enumerate(reader):
             
             try:
+                try:
+                    student["gpa"] = float(student["gpa"])
+                except (TypeError, ValueError) as e:
+                    raise ValueError(f"Некорректное значение GPA: {student['gpa']!r}") from e
                 students.append(student_from_dict(student))
             except ValueError as e:
-                raise ValueError(f"Ошибка {e} в записи номер {num+1}")
+                raise ValueError(f"Ошибка {e} в записи номер {num + 1}") from e
             
     return students
     
 def add_student(path, student):
-    pass
+    ensure_storage(path)
+    student = student_from_dict(student)
+    students = load_students(path)
+    students.append(student)
+    save_students(path, students)
     
     
 def list_students(path, sort_by=None):
-    pass
-    
+    ensure_storage(path)
+    students = load_students(path)
+    if sort_by is not None:
+        if sort_by not in ("fio", "gpa"):
+            raise ValueError("Сортировка доступна только по fio или gpa")
+        students.sort(key=lambda student: student[sort_by])
+    return students
     
     
 def find_students(path, substr):
-    pass
+    ensure_storage(path)
+    query = substr.casefold()
+    return [student for student in load_students(path) if query in student["fio"].casefold()]
     
     
 def remove_students(path, fio):
-    pass
+    ensure_storage(path)
+    students = load_students(path)
+    remaining = [student for student in students if student["fio"] != fio]
+    removed = len(students) - len(remaining)
+    if removed:
+        save_students(path, remaining)
+    return removed
     
     
 def update_students(path, fio, **fields):
-    pass
+    if not fields:
+        raise ValueError("Укажите хотя бы одно поле для обновления")
+
+    unknown = set(fields) - set(STUDENT_FIELDS)
+    if unknown:
+        raise ValueError(f"Неизвестные поля: {', '.join(sorted(unknown))}")
+    if "fio" in fields:
+        raise ValueError("Поле fio нельзя обновлять этой командой")
+
+    ensure_storage(path)
+    students = load_students(path)
+    updated = 0
+    for index, student in enumerate(students):
+        if student["fio"] == fio:
+            students[index] = student_from_dict({**student, **fields})
+            updated += 1
+
+    if updated:
+        save_students(path, students)
+    return updated
     
     
     

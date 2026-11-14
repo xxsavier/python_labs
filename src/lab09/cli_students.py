@@ -1,31 +1,93 @@
 import argparse
+import csv
+import sys
 
-parser = argparse.ArgumentParser(description="CLI-утилиты для работы с хранилищем; lab09")
-parser.add_argument("--db", default="data/lab09/students.csv", help="Путь к  необходимому хранилищу")
-subparsers = parser.add_subparsers(dest="command", required="True")
+from src.lab08.models import format_student, make_student
+from src.lab09.group import (
+    add_student,
+    find_students,
+    list_students,
+    remove_students,
+    update_students,
+)
 
-add_pars = subparsers.add_parser("add", help="Запись студента в конец")
-add_pars.add_argument("--fio", required=True, help="ФИО студента")
-add_pars.add_argument("--birthdate", required=True, help="Дата рождения студента")
-add_pars.add_argument("--group", required=True, help="Группа студента")
-add_pars.add_argument("--gpa", type=float, required=True, help="GPA студента")
 
-list_pars = subparsers.add_parser("list", help="Выводит список всех студентов")
-list_pars.add_argument("--sort", help="По какому параметру сортировать")
+def build_parser():
+    parser = argparse.ArgumentParser(description="CLI для работы с базой студентов")
+    parser.add_argument("--db", default="data/lab09/students.csv", help="Путь к CSV-хранилищу")
+    subparsers = parser.add_subparsers(dest="command", required=True)
 
-find_pars = subparsers.add_parser("find", help="Поиск студентов по части ФИО")
-find_pars.add_argument("--q", required=True, help = "Строка поиска")
+    add_parser = subparsers.add_parser("add", help="Добавить студента")
+    add_parser.add_argument("--db", default=argparse.SUPPRESS, help="Путь к CSV-хранилищу")
+    add_parser.add_argument("--fio", required=True, help="ФИО студента")
+    add_parser.add_argument("--birthdate", required=True, help="Дата рождения студента")
+    add_parser.add_argument("--group", required=True, help="Группа студента")
+    add_parser.add_argument("--gpa", required=True, help="GPA студента")
 
-remove_pars = subparsers.add_parser("remove", help="Удаляет студента по ФИО")
-remove_pars.add_argument("--fio", required=True, help="ФИО студента")
+    list_parser = subparsers.add_parser("list", help="Вывести список студентов")
+    list_parser.add_argument("--db", default=argparse.SUPPRESS, help="Путь к CSV-хранилищу")
+    list_parser.add_argument("--sort", choices=("fio", "gpa"), help="Поле сортировки")
 
-update_pars = subparsers.add_parser("update", help="Обновить выбранное поле студента")
-update_pars.add_argument("--fio", help="ФИО студента")
-update_pars.add_argument("--birthdate", help="Дата рождения студента")
-update_pars.add_argument("--group", help="Группа студента")
-update_pars.add_argument("--gpa", type=float, help="GPA студента")
+    find_parser = subparsers.add_parser("find", help="Найти студентов по части ФИО")
+    find_parser.add_argument("--db", default=argparse.SUPPRESS, help="Путь к CSV-хранилищу")
+    find_parser.add_argument("--q", required=True, help="Подстрока для поиска в ФИО")
 
-args = parser.parse_args()
+    remove_parser = subparsers.add_parser("remove", help="Удалить студента по ФИО")
+    remove_parser.add_argument("--db", default=argparse.SUPPRESS, help="Путь к CSV-хранилищу")
+    remove_parser.add_argument("--fio", required=True, help="ФИО студента")
 
-if args.command == "X":
-    pass
+    update_parser = subparsers.add_parser("update", help="Обновить данные студента")
+    update_parser.add_argument("--db", default=argparse.SUPPRESS, help="Путь к CSV-хранилищу")
+    update_parser.add_argument("--fio", required=True, help="ФИО студента для поиска")
+    update_parser.add_argument("--birthdate", help="Новая дата рождения")
+    update_parser.add_argument("--group", help="Новая группа")
+    update_parser.add_argument("--gpa", help="Новый GPA")
+
+    return parser
+
+
+def main():
+    args = build_parser().parse_args()
+
+    try:
+        if args.command == "add":
+            student = make_student(args.fio, args.birthdate, args.group, parse_gpa(args.gpa))
+            add_student(args.db, student)
+            print("Студент добавлен.")
+        elif args.command == "list":
+            for student in list_students(args.db, args.sort):
+                print(format_student(student))
+        elif args.command == "find":
+            for student in find_students(args.db, args.q):
+                print(format_student(student))
+        elif args.command == "remove":
+            removed = remove_students(args.db, args.fio)
+            print(f"Удалено: {removed}")
+        elif args.command == "update":
+            fields = {
+                field: value
+                for field, value in (
+                    ("birthdate", args.birthdate),
+                    ("group", args.group),
+                    ("gpa", parse_gpa(args.gpa) if args.gpa is not None else None),
+                )
+                if value is not None
+            }
+            updated = update_students(args.db, args.fio, **fields)
+            print(f"Обновлено: {updated}")
+    except (ValueError, OSError, UnicodeError, csv.Error) as error:
+        print(f"Ошибка: {error}", file=sys.stderr)
+        return 1
+
+    return 0
+
+
+def parse_gpa(value):
+    try:
+        return float(value)
+    except ValueError as error:
+        raise ValueError(f"GPA должно быть числом, получено {value!r}") from error
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
