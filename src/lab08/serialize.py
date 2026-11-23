@@ -62,17 +62,17 @@ def students_from_json(path) -> list[dict]:
 
 
 if __name__ == "__main__":    
-    input_json = "data/lab08/students_input.json"
-    output_json = "data/lab08/students_output.json"
+    # input_json = "data/lab08/students_input.json"
+    # output_json = "data/lab08/students_output.json"
     bad_json = "data/lab08/students_bad.json"
 
-    print(f"Чтение из {input_json} и сохранение в {output_json}:")
-    try:
-        students_list = students_from_json(input_json)
-        print(f"Успешно загружено записей: {len(students_list)}") 
-        students_to_json(students_list, output_json)
-    except Exception as e:
-        print(f"Ошибка: {e}")
+    # print(f"Чтение из {input_json} и сохранение в {output_json}:")
+    # try:
+    #     students_list = students_from_json(input_json)
+    #     print(f"Успешно загружено записей: {len(students_list)}") 
+    #     students_to_json(students_list, output_json)
+    # except Exception as e:
+    #     print(f"Ошибка: {e}")
 
     print(f"Попытка загрузить файл с ошибками ({bad_json}):")
     try:

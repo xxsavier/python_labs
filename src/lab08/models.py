@@ -142,17 +142,17 @@ def format_student(rec):
     return all_fio + ' ' + group + ', ' + age + ', ' + gpa
 
 if __name__ == "__main__":
-    student = make_student("Салфеткиненкочдияровский Иван Аннович", "2006-06-07", "БИВТ-26-6-1", 4.2)
+    student = make_student("Салфеткиненкочдияровский Иван Аннович", "2006-02-30", "БИВТ-26-6-1", 4.2)
     print("Создан студент:", student)
 
-    print("Форматирование:", format_student(student))
+    # print("Форматирование:", format_student(student))
 
-    print("Возраст:", student_age(student))
+    # print("Возраст:", student_age(student))
 
-    print("Попытка создать студента с неверным GPA")
-    try:
-        make_student("Вэльюэрророва Арина Рустемовна", "2006-01-01", "ИУ-5", 67.0)
-    except ValueError as e:
-        print(f"Перехвачена ожидаемая ошибка: {e}")
+    # print("Попытка создать студента с неверным GPA")
+    # try:
+    #     make_student("Вэльюэрророва Арина Рустемовна", "2006-01-01", "ИУ-5", 67.0)
+    # except ValueError as e:
+    #     print(f"Перехвачена ожидаемая ошибка: {e}")
         
     

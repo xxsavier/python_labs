@@ -78,7 +78,7 @@ def list_students(path, sort_by=None):
 def find_students(path, substr):
     ensure_storage(path)
     query = substr.casefold()
-    return [student for student in load_students(path) if query in student["fio"].casefold()]
+    return [student for student in load_students(path) if query in student["fio"].casefold()] 
     
     
 def remove_students(path, fio):

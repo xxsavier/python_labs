@@ -58,8 +58,12 @@ def main():
             for student in list_students(args.db, args.sort):
                 print(format_student(student))
         elif args.command == "find":
-            for student in find_students(args.db, args.q):
-                print(format_student(student))
+            students = find_students(args.db, args.q)
+            if not students:
+                print("Не найден соответствующий студент.")
+            else:
+                for student in students:
+                    print(format_student(student))
         elif args.command == "remove":
             removed = remove_students(args.db, args.fio)
             print(f"Удалено: {removed}")
