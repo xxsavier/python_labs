@@ -46,7 +46,7 @@
 Список и результаты поиска печатаются по одной записи на строку через `format_student` из ЛР8.
 
 <details>
-<summary>Код src/lab08/group.py</summary>
+<summary>Код src/lab09/group.py</summary>
 
 ``` python
 import csv
@@ -132,7 +132,7 @@ def find_students(path, substr):
     return [student for student in load_students(path) if query in student["fio"].casefold()] 
     
     
-def remove_students(path, fio):
+def remove_student(path, fio):
     ensure_storage(path)
     students = load_students(path)
     remaining = [student for student in students if student["fio"] != fio]
@@ -142,33 +142,37 @@ def remove_students(path, fio):
     return removed
     
     
-def update_students(path, fio, **fields):
+def update_student(path, fio, **fields):
     if not fields:
         raise ValueError("Укажите хотя бы одно поле для обновления")
 
     unknown = set(fields) - set(STUDENT_FIELDS)
     if unknown:
         raise ValueError(f"Неизвестные поля: {', '.join(sorted(unknown))}")
+
     if "fio" in fields:
         raise ValueError("Поле fio нельзя обновлять этой командой")
 
     ensure_storage(path)
     students = load_students(path)
-    updated = 0
+
     for index, student in enumerate(students):
         if student["fio"] == fio:
-            students[index] = student_from_dict({**student, **fields})
-            updated += 1
+            updated_student = student_from_dict({**student, **fields})
 
-    if updated:
-        save_students(path, students)
-    return updated
+            students[index] = updated_student
+            save_students(path, students)
+
+            return True
+
+    return False
+
 ```
 
 </details>
 
 <details>
-<summary>Код src/lab08/cli_students.py</summary>
+<summary>Код src/lab09/cli_students.py</summary>
 
 ``` python
 import argparse
@@ -180,8 +184,8 @@ from src.lab09.group import (
     add_student,
     find_students,
     list_students,
-    remove_students,
-    update_students,
+    remove_student,
+    update_student, 
 )
 
 
@@ -238,7 +242,7 @@ def main():
                 for student in students:
                     print(format_student(student))
         elif args.command == "remove":
-            removed = remove_students(args.db, args.fio)
+            removed = remove_student(args.db, args.fio)
             print(f"Удалено: {removed}")
         elif args.command == "update":
             fields = {
@@ -250,8 +254,11 @@ def main():
                 )
                 if value is not None
             }
-            updated = update_students(args.db, args.fio, **fields)
-            print(f"Обновлено: {updated}")
+            updated = update_student(args.db, args.fio, **fields)
+            if updated:
+                print("Данные студента обновлены.")
+            else:
+                print("Студент не найден.")
     except (ValueError, OSError, UnicodeError, csv.Error) as error:
         print(f"Ошибка: {error}", file=sys.stderr)
         return 1
@@ -262,7 +269,7 @@ def main():
 def parse_gpa(value):
     try:
         return float(value)
-    except ValueError as error:
+    except (ValueError, TypeError) as error:
         raise ValueError(f"GPA должно быть числом, получено {value!r}") from error
 
 

@@ -7,8 +7,8 @@ from src.lab09.group import (
     add_student,
     find_students,
     list_students,
-    remove_students,
-    update_students,
+    remove_student,
+    update_student, 
 )
 
 
@@ -65,7 +65,7 @@ def main():
                 for student in students:
                     print(format_student(student))
         elif args.command == "remove":
-            removed = remove_students(args.db, args.fio)
+            removed = remove_student(args.db, args.fio)
             print(f"Удалено: {removed}")
         elif args.command == "update":
             fields = {
@@ -77,8 +77,11 @@ def main():
                 )
                 if value is not None
             }
-            updated = update_students(args.db, args.fio, **fields)
-            print(f"Обновлено: {updated}")
+            updated = update_student(args.db, args.fio, **fields)
+            if updated:
+                print("Данные студента обновлены.")
+            else:
+                print("Студент не найден.")
     except (ValueError, OSError, UnicodeError, csv.Error) as error:
         print(f"Ошибка: {error}", file=sys.stderr)
         return 1
@@ -89,7 +92,7 @@ def main():
 def parse_gpa(value):
     try:
         return float(value)
-    except ValueError as error:
+    except (ValueError, TypeError) as error:
         raise ValueError(f"GPA должно быть числом, получено {value!r}") from error
 
 
