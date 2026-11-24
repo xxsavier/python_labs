@@ -1,3 +1,10 @@
+"""
+Модуль командной строки для управления базой данных студентов.
+
+Позволяет добавлять, просматривать, искать, удалять и обновлять
+записи студентов в CSV-хранилище.
+"""
+
 import argparse
 import csv
 import sys
@@ -11,8 +18,16 @@ from src.lab09.group import (
     update_student, 
 )
 
-
 def build_parser():
+    """
+    Создает и настраивает парсер аргументов командной строки.
+
+    Добавляет общие параметры и подкоманды:
+    add, list, find, remove и update.
+
+    Returns:
+        argparse.ArgumentParser: Настроенный парсер аргументов.
+    """
     parser = argparse.ArgumentParser(description="CLI для работы с базой студентов")
     parser.add_argument("--db", default="data/lab09/students.csv", help="Путь к CSV-хранилищу")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -47,6 +62,15 @@ def build_parser():
 
 
 def main():
+    """
+    Выполняет команду, переданную пользователем через терминал.
+
+    Обрабатывает аргументы, вызывает соответствующие функции
+    для работы с базой студентов и выводит результат.
+
+    Returns:
+        int: Код завершения программы (0 — успех, 1 — ошибка).
+    """
     args = build_parser().parse_args()
 
     try:
@@ -90,6 +114,18 @@ def main():
 
 
 def parse_gpa(value):
+    """
+    Преобразует переданное значение GPA в число с плавающей точкой.
+
+    Args:
+        value: Значение GPA, полученное из аргументов командной строки.
+
+    Returns:
+        float: Преобразованное числовое значение GPA.
+
+    Raises:
+        ValueError: Если переданное значение нельзя преобразовать в число.
+    """
     try:
         return float(value)
     except (ValueError, TypeError) as error:
